@@ -1,0 +1,384 @@
+<?xml version="1.0" ?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd">
+    <key id="Label" for="node" attr.name="Label" attr.type="string"></key>
+    <key id="NumberOfBlockElements" for="node" attr.name="NumberOfBlockElements" attr.type="int"></key>
+    <key id="Explanations" for="edge" attr.name="Explanations" attr.type="string"></key>
+    <key id="Label" for="edge" attr.name="Label" attr.type="string"></key>
+    <key id="NumberOfReasons" for="edge" attr.name="NumberOfReasons" attr.type="int"></key>
+    <graph id="G" edgedefault="directed">
+        <node id="0">
+            <data key="Label">Block 0</data>
+            <data key="NumberOfBlockElements">134</data>
+        </node>
+        <node id="1">
+            <data key="Label">Block 1</data>
+            <data key="NumberOfBlockElements">232</data>
+        </node>
+        <node id="2">
+            <data key="Label">Block 2</data>
+            <data key="NumberOfBlockElements">183</data>
+        </node>
+        <edge id="0-2" source="0" target="2" label="0-2">
+            <data key="Explanations">Block 0 REQUIRES Block 2 (2 reasons) [[CLASS_H] CircularLabyrinth~~H-&gt;[CLASS_H] Labyrinth~~H, [CLASS_H] RectangularLabyrinth~~H-&gt;[CLASS_H] Labyrinth~~H]</data>
+            <data key="Label">REQUIRES</data>
+            <data key="NumberOfReasons">2</data>
+        </edge>
+        <edge id="1-0" source="1" target="0" label="1-0">
+            <data key="Explanations">Block 1 REQUIRES Block 0 (34 reasons) [[INCLUDE_DIR] #include &lt;memory&gt;-&gt;[HEADER_FILE] circularlabyrinth.h, [INCLUDE_DIR] #include &lt;vector&gt;-&gt;[HEADER_FILE] circularlabyrinth.h, [INCLUDE_DIR] #include "cellborder.h"-&gt;[HEADER_FILE] circularlabyrinth.h, [INCLUDE_DIR] #include "cellborder.h"-&gt;[HEADER_FILE] cellborder.h, [INCLUDE_DIR] #include "depthfirstsearch.h"-&gt;[HEADER_FILE] circularlabyrinth.h, [INCLUDE_DIR] #include "depthfirstsearch.h"-&gt;[HEADER_FILE] depthfirstsearch.h, [FUNCTION_H] CircularLabyrinth::GenerateLabyrinth~DepthFirstSearch~~H-&gt;[CLASS_H] CircularLabyrinth~~H, [FUNCTION_H] CircularLabyrinth::PrintLabyrinthSVG~const std::string~~H-&gt;[CLASS_H] CircularLabyrinth~~H, [FUNCTION_H] CircularLabyrinth::RemoveBorders~const std::vector&lt;std::pair&lt;int, int&gt;&gt;~~H-&gt;[CLASS_H] CircularLabyrinth~~H, [INCLUDE_DIR] #include &lt;memory&gt;-&gt;[HEADER_FILE] rectangularlabyrinth.h, [INCLUDE_DIR] #include &lt;vector&gt;-&gt;[HEADER_FILE] rectangularlabyrinth.h, [INCLUDE_DIR] #include "cellborder.h"-&gt;[HEADER_FILE] rectangularlabyrinth.h, [INCLUDE_DIR] #include "cellborder.h"-&gt;[HEADER_FILE] cellborder.h, [INCLUDE_DIR] #include "depthfirstsearch.h"-&gt;[HEADER_FILE] rectangularlabyrinth.h, [INCLUDE_DIR] #include "depthfirstsearch.h"-&gt;[HEADER_FILE] depthfirstsearch.h, [FUNCTION_H] RectangularLabyrinth::GenerateLabyrinth~DepthFirstSearch~~H-&gt;[CLASS_H] RectangularLabyrinth~~H, [FUNCTION_H] RectangularLabyrinth::PrintLabyrinthSVG~const std::string~~H-&gt;[CLASS_H] RectangularLabyrinth~~H, [FUNCTION_H] RectangularLabyrinth::RemoveBorders~const std::vector&lt;std::pair&lt;int, int&gt;&gt;~~H-&gt;[CLASS_H] RectangularLabyrinth~~H, [INCLUDE_DIR] #include &lt;cmath&gt;-&gt;[SOURCE_FILE] circularlabyrinth.cpp, [INCLUDE_DIR] #include &lt;algorithm&gt;-&gt;[SOURCE_FILE] circularlabyrinth.cpp, [INCLUDE_DIR] #include &lt;fstream&gt;-&gt;[SOURCE_FILE] circularlabyrinth.cpp, [INCLUDE_DIR] #include &lt;iostream&gt;-&gt;[SOURCE_FILE] circularlabyrinth.cpp, [STATEMENT_IMPL] {
+	adjacencylist_.clear();
+	adjacencylist_.resize(vertices_);
+
+	/** Proper to circular maze **/
+
+	for (int i = 1; i &lt; size_; ++i) {
+		for (int j = 0; j &lt; ringnodecount_[i]; ++j) {
+			int node = ringnodeprefixsum_[i] + j, nnode;
+			std::shared_ptr &lt; CellBorder &gt; ptr;
+
+			nnode = ringnodeprefixsum_[i - 1]
+					+ (ringnodecount_[i - 1] * j) / ringnodecount_[i];
+			ptr = std::make_shared &lt; ArcBorder
+					&gt; (0, 0, i, j * 2 * M_PI / ringnodecount_[i] - M_PI / 2, (j
+							+ 1) * 2 * M_PI / ringnodecount_[i] - M_PI / 2);
+			adjacencylist_[node].push_back( { nnode, ptr });
+			adjacencylist_[nnode].push_back( { node, ptr });
+
+			nnode = ringnodeprefixsum_[i] + ((j + 1) % ringnodecount_[i]);
+			double theta = (j + 1) * 2 * M_PI / ringnodecount_[i] - M_PI / 2;
+			ptr = std::make_shared &lt; LineBorder
+					&gt; (i * cos(theta), i * sin(theta), (i + 1) * cos(theta), (i
+							+ 1) * sin(theta));
+			adjacencylist_[node].push_back( { nnode, ptr });
+			adjacencylist_[nnode].push_back( { node, ptr });
+
+			if (i == size_ - 1 and node != startvertex_
+					and node != endvertex_) {
+				ptr = std::make_shared &lt; ArcBorder
+						&gt; (0, 0, size_, j * 2 * M_PI / ringnodecount_[i]
+								- M_PI / 2, (j + 1) * 2 * M_PI
+								/ ringnodecount_[i] - M_PI / 2);
+				adjacencylist_[node].push_back( { -1, ptr });
+			}
+		}
+	}
+
+	/** ********************** **/
+}~~IMPL-&gt;[FUNCTION_IMPL] CircularLabyrinth::InitialiseGraph~~IMPL, [FUNCTION_IMPL] CircularLabyrinth::GenerateLabyrinth~DepthFirstSearch~~IMPL-&gt;[SOURCE_FILE] circularlabyrinth.cpp, [FUNCTION_IMPL] CircularLabyrinth::RemoveBorders~const std::vector&lt;std::pair&lt;int, int&gt;&gt;~~IMPL-&gt;[SOURCE_FILE] circularlabyrinth.cpp, [FUNCTION_IMPL] CircularLabyrinth::PrintLabyrinthSVG~const std::string~~IMPL-&gt;[SOURCE_FILE] circularlabyrinth.cpp, [STATEMENT_IMPL] {
+
+	std::string outputprefix = "maze";
+	std::map&lt;std::string, int&gt; optionmap { { "-m", 0 }, { "-s", 20 },
+			{ "-w", 20 }, { "-h", 20 } };
+
+	/* parsing command line parameters */
+
+	for (int i = 1; i &lt; argc; i++) {
+		if (optionmap.find(argv[i]) == optionmap.end()) {
+			std::cerr &lt;&lt; "Unknown argument " &lt;&lt; argv[i] &lt;&lt; "\n";
+			return 1;
+		}
+
+		if (i + 1 == argc) {
+			std::cerr &lt;&lt; "Missing option for argument " &lt;&lt; argv[i] &lt;&lt; std::endl;
+			return 1;
+		}
+		int x;
+		try {
+			x = std::stoi(argv[i + 1]);
+		} catch (...) {
+			std::cerr &lt;&lt; "Invalid argument " &lt;&lt; argv[i + 1] &lt;&lt; " for option "
+					&lt;&lt; argv[i] &lt;&lt; "\n";
+			return 1;
+		}
+		optionmap[argv[i++]] = x;
+	}
+
+	DepthFirstSearch *depthFirstSearch;
+
+	switch (optionmap["-m"]) {
+	case 0: {
+		if (optionmap["-w"] &lt; 1 or optionmap["-h"] &lt; 1) {
+			std::cerr &lt;&lt; "Invalide size " &lt;&lt; optionmap["-w"] &lt;&lt; "x"
+					&lt;&lt; optionmap["-h"] &lt;&lt; " for rectangular labyrinth\n";
+			return 1;
+		}
+
+		std::cout &lt;&lt; "Rectangular labyrinth of size " &lt;&lt; optionmap["-w"] &lt;&lt; "x"
+				&lt;&lt; optionmap["-h"] &lt;&lt; "\n";
+		RectangularLabyrinth *rectangularLabyrinth = new RectangularLabyrinth(
+				optionmap["-w"], optionmap["-h"]);
+
+		std::cout &lt;&lt; "Labyrinth generation using Depth-first search\n";
+		depthFirstSearch = new DepthFirstSearch();
+
+		std::cout &lt;&lt; "Initialising graph..." &lt;&lt; std::endl;
+		rectangularLabyrinth-&gt;InitialiseGraph();
+
+		std::cout &lt;&lt; "Generating labyrinth..." &lt;&lt; std::endl;
+		rectangularLabyrinth-&gt;GenerateLabyrinth(depthFirstSearch);
+
+		rectangularLabyrinth-&gt;PrintLabyrinthSVG(outputprefix);
+
+		break;
+	}
+
+	case 1: {
+		if (optionmap["-s"] &lt; 1) {
+			std::cerr &lt;&lt; "Invalide size " &lt;&lt; optionmap["-s"]
+					&lt;&lt; " for circular labyrinth\n";
+			return 1;
+		}
+		std::cout &lt;&lt; "Circular labyrinth of size " &lt;&lt; optionmap["-s"] &lt;&lt; "\n";
+		CircularLabyrinth *circularLabyrinth = new CircularLabyrinth(
+				optionmap["-s"]);
+
+		std::cout &lt;&lt; "Labyrinth generation using Depth-first search\n";
+		depthFirstSearch = new DepthFirstSearch();
+
+		std::cout &lt;&lt; "Initialising graph..." &lt;&lt; std::endl;
+		circularLabyrinth-&gt;InitialiseGraph();
+
+		std::cout &lt;&lt; "Generating labyrinth..." &lt;&lt; std::endl;
+		circularLabyrinth-&gt;GenerateLabyrinth(depthFirstSearch);
+
+		circularLabyrinth-&gt;PrintLabyrinthSVG(outputprefix);
+
+		break;
+	}
+
+	default:
+		std::cerr &lt;&lt; "Unknown labyrinth type " &lt;&lt; optionmap["-m"];
+
+		return 1;
+	}
+
+	return 0;
+}~~IMPL-&gt;[FUNCTION_IMPL] main~int~char~~IMPL, [INCLUDE_DIR] #include &lt;algorithm&gt;-&gt;[SOURCE_FILE] rectangularlabyrinth.cpp, [INCLUDE_DIR] #include &lt;fstream&gt;-&gt;[SOURCE_FILE] rectangularlabyrinth.cpp, [INCLUDE_DIR] #include &lt;iostream&gt;-&gt;[SOURCE_FILE] rectangularlabyrinth.cpp, [STATEMENT_IMPL] {
+	adjacencylist_.clear();
+	adjacencylist_.resize(vertices_);
+
+	/** Proper to rectangular maze **/
+
+	// Lower and upper boundaries
+	for (int i = 0; i &lt; width_; ++i) {
+		adjacencylist_[VertexIndex(0, i)].push_back(
+				{ -1, std::make_shared &lt; LineBorder &gt; (i, 0, i + 1, 0) });
+		adjacencylist_[VertexIndex(height_ - 1, i)].push_back(
+				{ -1, std::make_shared &lt; LineBorder
+						&gt; (i, height_, i + 1, height_) });
+	}
+
+	// Left and right boundaries, leaving space for entry and exit
+	for (int i = 0; i &lt; height_; ++i) {
+		if (i != 0)
+			adjacencylist_[VertexIndex(i, 0)].push_back(
+					{ -1, std::make_shared &lt; LineBorder &gt; (0, i, 0, i + 1) });
+		if (i != height_ - 1)
+			adjacencylist_[VertexIndex(i, 0)].push_back(
+					{ -1, std::make_shared &lt; LineBorder
+							&gt; (width_, i, width_, i + 1) });
+	}
+
+	// Horizontally adjacent cells
+	for (int i = 0; i &lt; height_; ++i) {
+		for (int j = 0; j &lt; width_ - 1; ++j) {
+			std::shared_ptr&lt;LineBorder&gt; ptr = std::make_shared &lt; LineBorder
+					&gt; (j + 1, i, j + 1, i + 1);
+			adjacencylist_[VertexIndex(i, j)].push_back(
+					{ VertexIndex(i, j + 1), ptr });
+			adjacencylist_[VertexIndex(i, j + 1)].push_back(
+					{ VertexIndex(i, j), ptr });
+		}
+	}
+
+
+	// Vertically adjacent cells
+	for (int i = 0; i &lt; height_ - 1; ++i) {
+		for (int j = 0; j &lt; width_; ++j) {
+			std::shared_ptr&lt;LineBorder&gt; ptr = std::make_shared &lt; LineBorder
+					&gt; (j, i + 1, j + 1, i + 1);
+			adjacencylist_[VertexIndex(i, j)].push_back(
+					{ VertexIndex(i + 1, j), ptr });
+			adjacencylist_[VertexIndex(i + 1, j)].push_back(
+					{ VertexIndex(i, j), ptr });
+		}
+	}
+
+	/** ************************** **/
+}~~IMPL-&gt;[FUNCTION_IMPL] RectangularLabyrinth::InitialiseGraph~~IMPL, [FUNCTION_IMPL] RectangularLabyrinth::GenerateLabyrinth~DepthFirstSearch~~IMPL-&gt;[SOURCE_FILE] rectangularlabyrinth.cpp, [FUNCTION_IMPL] RectangularLabyrinth::RemoveBorders~const std::vector&lt;std::pair&lt;int, int&gt;&gt;~~IMPL-&gt;[SOURCE_FILE] rectangularlabyrinth.cpp, [FUNCTION_IMPL] RectangularLabyrinth::PrintLabyrinthSVG~const std::string~~IMPL-&gt;[SOURCE_FILE] rectangularlabyrinth.cpp]</data>
+            <data key="Label">REQUIRES</data>
+            <data key="NumberOfReasons">34</data>
+        </edge>
+        <edge id="2-0" source="2" target="0" label="2-0">
+            <data key="Explanations">Block 2 REQUIRES Block 0 (7 reasons) [[INCLUDE_DIR] #include "labyrinth.h"-&gt;[HEADER_FILE] circularlabyrinth.h, [INCLUDE_DIR] #include "cellborder.h"-&gt;[HEADER_FILE] cellborder.h, [INCLUDE_DIR] #include "depthfirstsearch.h"-&gt;[HEADER_FILE] depthfirstsearch.h, [INCLUDE_DIR] #include "labyrinth.h"-&gt;[HEADER_FILE] rectangularlabyrinth.h, [STATEMENT_IMPL] {
+
+	Labyrinth::InitialiseGraph();
+
+	/** Proper to circular maze **/
+
+	for (int i = 1; i &lt; size_; ++i) {
+		for (int j = 0; j &lt; ringnodecount_[i]; ++j) {
+			int node = ringnodeprefixsum_[i] + j, nnode;
+			std::shared_ptr&lt;CellBorder&gt; ptr;
+
+			nnode = ringnodeprefixsum_[i - 1]
+					+ (ringnodecount_[i - 1] * j) / ringnodecount_[i];
+			ptr = std::make_shared &lt; ArcBorder
+					&gt; (0, 0, i, j * 2 * M_PI / ringnodecount_[i] - M_PI / 2, (j
+							+ 1) * 2 * M_PI / ringnodecount_[i] - M_PI / 2);
+			adjacencylist_[node].push_back( { nnode, ptr });
+			adjacencylist_[nnode].push_back( { node, ptr });
+
+			nnode = ringnodeprefixsum_[i] + ((j + 1) % ringnodecount_[i]);
+			double theta = (j + 1) * 2 * M_PI / ringnodecount_[i] - M_PI / 2;
+			ptr = std::make_shared &lt; LineBorder
+					&gt; (i * cos(theta), i * sin(theta), (i + 1) * cos(theta), (i
+							+ 1) * sin(theta));
+			adjacencylist_[node].push_back( { nnode, ptr });
+			adjacencylist_[nnode].push_back( { node, ptr });
+
+			if (i == size_ - 1 and node != startvertex_
+					and node != endvertex_) {
+				ptr = std::make_shared &lt; ArcBorder
+						&gt; (0, 0, size_, j * 2 * M_PI / ringnodecount_[i]
+								- M_PI / 2, (j + 1) * 2 * M_PI
+								/ ringnodecount_[i] - M_PI / 2);
+				adjacencylist_[node].push_back( { -1, ptr });
+			}
+		}
+	}
+
+	/** ********************** **/
+}~~IMPL-&gt;[FUNCTION_IMPL] CircularLabyrinth::InitialiseGraph~~IMPL, [STATEMENT_IMPL] {
+
+	std::string outputprefix = "maze";
+	std::map&lt;std::string, int&gt; optionmap { { "-m", 0 }, { "-s", 20 },
+			{ "-w", 20 }, { "-h", 20 } };
+
+	/* parsing command line parameters */
+
+	for (int i = 1; i &lt; argc; i++) {
+		if (optionmap.find(argv[i]) == optionmap.end()) {
+			std::cerr &lt;&lt; "Unknown argument " &lt;&lt; argv[i] &lt;&lt; "\n";
+			return 1;
+		}
+
+		if (i + 1 == argc) {
+			std::cerr &lt;&lt; "Missing option for argument " &lt;&lt; argv[i] &lt;&lt; std::endl;
+			return 1;
+		}
+		int x;
+		try {
+			x = std::stoi(argv[i + 1]);
+		} catch (...) {
+			std::cerr &lt;&lt; "Invalid argument " &lt;&lt; argv[i + 1] &lt;&lt; " for option "
+					&lt;&lt; argv[i] &lt;&lt; "\n";
+			return 1;
+		}
+		optionmap[argv[i++]] = x;
+	}
+
+	DepthFirstSearch *depthFirstSearch;
+	Labyrinth *labyrinth;
+
+	switch (optionmap["-m"]) {
+	case 0: {
+		if (optionmap["-w"] &lt; 1 or optionmap["-h"] &lt; 1) {
+			std::cerr &lt;&lt; "Invalide size " &lt;&lt; optionmap["-w"] &lt;&lt; "x"
+					&lt;&lt; optionmap["-h"] &lt;&lt; " for rectangular labyrinth\n";
+			return 1;
+		}
+
+		std::cout &lt;&lt; "Rectangular labyrinth of size " &lt;&lt; optionmap["-w"] &lt;&lt; "x"
+				&lt;&lt; optionmap["-h"] &lt;&lt; "\n";
+		labyrinth = new RectangularLabyrinth(optionmap["-w"], optionmap["-h"]);
+
+		break;
+	}
+
+	case 1: {
+		if (optionmap["-s"] &lt; 1) {
+			std::cerr &lt;&lt; "Invalide size " &lt;&lt; optionmap["-s"]
+					&lt;&lt; " for circular labyrinth\n";
+			return 1;
+		}
+		std::cout &lt;&lt; "Circular labyrinth of size " &lt;&lt; optionmap["-s"] &lt;&lt; "\n";
+		labyrinth = new CircularLabyrinth(optionmap["-s"]);
+
+		break;
+	}
+
+	default:
+		std::cerr &lt;&lt; "Unknown labyrinth type " &lt;&lt; optionmap["-m"];
+
+		return 1;
+	}
+
+	std::cout &lt;&lt; "Labyrinth generation using Depth-first search\n";
+	depthFirstSearch = new DepthFirstSearch();
+
+	std::cout &lt;&lt; "Initialising graph..." &lt;&lt; std::endl;
+	labyrinth-&gt;InitialiseGraph();
+
+	std::cout &lt;&lt; "Generating labyrinth..." &lt;&lt; std::endl;
+	labyrinth-&gt;GenerateLabyrinth(depthFirstSearch);
+
+	labyrinth-&gt;PrintLabyrinthSVG(outputprefix);
+
+	return 0;
+}~~IMPL-&gt;[FUNCTION_IMPL] main~int~char~~IMPL, [STATEMENT_IMPL] {
+
+	Labyrinth::InitialiseGraph();
+
+	/** Proper to rectangular maze **/
+
+	// Lower and upper boundaries
+	for (int i = 0; i &lt; width_; ++i) {
+		adjacencylist_[VertexIndex(0, i)].push_back(
+				{ -1, std::make_shared &lt; LineBorder &gt; (i, 0, i + 1, 0) });
+		adjacencylist_[VertexIndex(height_ - 1, i)].push_back(
+				{ -1, std::make_shared &lt; LineBorder
+						&gt; (i, height_, i + 1, height_) });
+	}
+
+	// Left and right boundaries, leaving space for entry and exit
+	for (int i = 0; i &lt; height_; ++i) {
+		if (i != 0)
+			adjacencylist_[VertexIndex(i, 0)].push_back(
+					{ -1, std::make_shared &lt; LineBorder &gt; (0, i, 0, i + 1) });
+		if (i != height_ - 1)
+			adjacencylist_[VertexIndex(i, 0)].push_back(
+					{ -1, std::make_shared &lt; LineBorder
+							&gt; (width_, i, width_, i + 1) });
+	}
+
+	// Horizontally adjacent cells
+	for (int i = 0; i &lt; height_; ++i) {
+		for (int j = 0; j &lt; width_ - 1; ++j) {
+			std::shared_ptr&lt;LineBorder&gt; ptr = std::make_shared &lt; LineBorder
+					&gt; (j + 1, i, j + 1, i + 1);
+			adjacencylist_[VertexIndex(i, j)].push_back(
+					{ VertexIndex(i, j + 1), ptr });
+			adjacencylist_[VertexIndex(i, j + 1)].push_back(
+					{ VertexIndex(i, j), ptr });
+		}
+	}
+
+	// Vertically adjacent cells
+	for (int i = 0; i &lt; height_ - 1; ++i) {
+		for (int j = 0; j &lt; width_; ++j) {
+			std::shared_ptr&lt;LineBorder&gt; ptr = std::make_shared &lt; LineBorder
+					&gt; (j, i + 1, j + 1, i + 1);
+			adjacencylist_[VertexIndex(i, j)].push_back(
+					{ VertexIndex(i + 1, j), ptr });
+			adjacencylist_[VertexIndex(i + 1, j)].push_back(
+					{ VertexIndex(i, j), ptr });
+		}
+	}
+
+	/** ************************** **/
+}~~IMPL-&gt;[FUNCTION_IMPL] RectangularLabyrinth::InitialiseGraph~~IMPL]</data>
+            <data key="Label">REQUIRES</data>
+            <data key="NumberOfReasons">7</data>
+        </edge>
+    </graph>
+</graphml>
