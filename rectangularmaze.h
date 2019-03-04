@@ -1,5 +1,5 @@
-#ifndef RECTANGULARLABYRINTH_H
-#define RECTANGULARLABYRINTH_H
+#ifndef RECTANGULARMAZE_H
+#define RECTANGULARMAZE_H
 
 #include <memory>
 #include <vector>
@@ -7,14 +7,14 @@
 #include "depthfirstsearch.h"
 #include "breadthfirstsearch.h"
 
-class RectangularLabyrinth {
+class RectangularMaze {
 public:
 
 	/** Proper to rectangular maze **/
-	RectangularLabyrinth(int, int);
+	RectangularMaze(int, int);
 	/** ************************** **/
-	void GenerateLabyrinth(MinimumSpanningtreeAlgorithm*);
-	void PrintLabyrinthSVG(const std::string&);
+	void GenerateMaze(MinimumSpanningtreeAlgorithm*);
+	void PrintMazeSVG(const std::string&);
 	void RemoveBorders(const std::vector<std::pair<int, int>>&);
 	void InitialiseGraph();
 
@@ -32,4 +32,4 @@ private:
 	/** ************************** **/
 };
 
-#endif /* end of include guard: RECTANGULARLABYRINTH_H */
+#endif /* end of include guard: RECTANGULARMAZE_H */

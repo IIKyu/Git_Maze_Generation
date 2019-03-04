@@ -5,7 +5,7 @@
 
 #include "depthfirstsearch.h"
 #include "breadthfirstsearch.h"
-#include "rectangularlabyrinth.h"
+#include "rectangularmaze.h"
 
 int main(int argc, char *argv[]) {
 
@@ -36,31 +36,31 @@ int main(int argc, char *argv[]) {
 	  }
 
 
-	RectangularLabyrinth *rectangularLabyrinth;
+	RectangularMaze* rectangularMaze;
 	MinimumSpanningtreeAlgorithm *algorithm;
 
 	if (optionmap["-w"] < 1 or optionmap["-h"] < 1) {
 		std::cerr << "Invalide size " << optionmap["-w"] << "x"
-				<< optionmap["-h"] << " for rectangular labyrinth\n";
+				<< optionmap["-h"] << " for rectangular maze\n";
 		return 1;
 	}
 
-	std::cout << "Rectangular labyrinth of size " << optionmap["-w"] << "x"
+	std::cout << "Rectangular maze of size " << optionmap["-w"] << "x"
 			<< optionmap["-h"] << "\n";
-	rectangularLabyrinth = new RectangularLabyrinth(optionmap["-w"], optionmap["-h"]);
+	rectangularMaze = new RectangularMaze(optionmap["-w"], optionmap["-h"]);
 
 
 	switch (optionmap["-a"]) {
 
 	case 0: {
-		std::cout << "Labyrinth generation using Depth-first search\n";
+		std::cout << "Maze generation using Depth-first search\n";
 		algorithm = new DepthFirstSearch();
 
 		break;
 	}
 
 	case 1: {
-		std::cout << "Labyrinth generation using Breadth-first search\n";
+		std::cout << "Maze generation using Breadth-first search\n";
 		algorithm = new BreadthFirstSearch();
 
 		break;
@@ -72,12 +72,12 @@ int main(int argc, char *argv[]) {
 	}
 
 	std::cout << "Initialising graph..." << std::endl;
-	rectangularLabyrinth->InitialiseGraph();
+	rectangularMaze->InitialiseGraph();
 
-	std::cout << "Generating labyrinth..." << std::endl;
-	rectangularLabyrinth->GenerateLabyrinth(algorithm);
+	std::cout << "Generating maze..." << std::endl;
+	rectangularMaze->GenerateMaze(algorithm);
 
-	rectangularLabyrinth->PrintLabyrinthSVG(outputprefix);
+	rectangularMaze->PrintMazeSVG(outputprefix);
 
 	return 0;
 }

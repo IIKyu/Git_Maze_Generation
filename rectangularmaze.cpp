@@ -2,20 +2,20 @@
 #include <fstream>
 #include <iostream>
 
-#include "rectangularlabyrinth.h"
+#include "rectangularmaze.h"
 
-RectangularLabyrinth::RectangularLabyrinth(int width, int height) :
+RectangularMaze::RectangularMaze(int width, int height) :
 		vertices_(width * height), startvertex_(0), endvertex_(
 				width * height - 1), width_(width), height_(height) {
 }
 
 /** Proper to rectangular maze **/
-int RectangularLabyrinth::VertexIndex(int row, int column) {
+int RectangularMaze::VertexIndex(int row, int column) {
 	return row * width_ + column;
 }
 /** ************************** **/
 
-void RectangularLabyrinth::InitialiseGraph() {
+void RectangularMaze::InitialiseGraph() {
 	adjacencylist_.clear();
 	adjacencylist_.resize(vertices_);
 
@@ -69,18 +69,18 @@ void RectangularLabyrinth::InitialiseGraph() {
 	/** ************************** **/
 }
 
-std::tuple<double, double, double, double> RectangularLabyrinth::GetCoordinateBounds() {
+std::tuple<double, double, double, double> RectangularMaze::GetCoordinateBounds() {
 	return std::make_tuple(0, 0, width_, height_);
 }
 
-void RectangularLabyrinth::GenerateLabyrinth(MinimumSpanningtreeAlgorithm* algorithm) {
+void RectangularMaze::GenerateMaze(MinimumSpanningtreeAlgorithm* algorithm) {
 	auto minimumspanningtree = algorithm->MinimumSpanningTree(vertices_,
 			adjacencylist_);
 	RemoveBorders(minimumspanningtree);
 }
 
 
-void RectangularLabyrinth::RemoveBorders(const std::vector<std::pair<int, int>>& edges) {
+void RectangularMaze::RemoveBorders(const std::vector<std::pair<int, int>>& edges) {
 	for (const auto& edge : edges) {
 		int u = edge.first, v = edge.second;
 		for (int i = 0; i < (int) adjacencylist_[u].size(); ++i) {
@@ -98,7 +98,7 @@ void RectangularLabyrinth::RemoveBorders(const std::vector<std::pair<int, int>>&
 	}
 }
 
-void RectangularLabyrinth::PrintLabyrinthSVG(const std::string& outputprefix) {
+void RectangularMaze::PrintMazeSVG(const std::string& outputprefix) {
 	std::ofstream svgfile(outputprefix + ".svg");
 	if (!svgfile) {
 		std::cerr << "Error opening " << outputprefix << ".svg for writing.\n";
