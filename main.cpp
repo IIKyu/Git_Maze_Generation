@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
 
 
 	RectangularLabyrinth *rectangularLabyrinth;
+	MinimumSpanningtreeAlgorithm *algorithm;
 
 	if (optionmap["-w"] < 1 or optionmap["-h"] < 1) {
 		std::cerr << "Invalide size " << optionmap["-w"] << "x"
@@ -53,26 +54,14 @@ int main(int argc, char *argv[]) {
 
 	case 0: {
 		std::cout << "Labyrinth generation using Depth-first search\n";
-		DepthFirstSearch *depthFirstSearch = new DepthFirstSearch();
-
-		std::cout << "Initialising graph..." << std::endl;
-		rectangularLabyrinth->InitialiseGraph();
-
-		std::cout << "Generating labyrinth..." << std::endl;
-		rectangularLabyrinth->GenerateLabyrinth(depthFirstSearch);
+		algorithm = new DepthFirstSearch();
 
 		break;
 	}
 
 	case 1: {
 		std::cout << "Labyrinth generation using Breadth-first search\n";
-		BreadthFirstSearch *breadthFirstSearch = new BreadthFirstSearch();
-
-		std::cout << "Initialising graph..." << std::endl;
-		rectangularLabyrinth->InitialiseGraph();
-
-		std::cout << "Generating labyrinth..." << std::endl;
-		rectangularLabyrinth->GenerateLabyrinth(breadthFirstSearch);
+		algorithm = new BreadthFirstSearch();
 
 		break;
 	}
@@ -81,6 +70,12 @@ int main(int argc, char *argv[]) {
 		std::cerr << "Unknown algorithm type " << optionmap["-a"];
 		return 1;
 	}
+
+	std::cout << "Initialising graph..." << std::endl;
+	rectangularLabyrinth->InitialiseGraph();
+
+	std::cout << "Generating labyrinth..." << std::endl;
+	rectangularLabyrinth->GenerateLabyrinth(algorithm);
 
 	rectangularLabyrinth->PrintLabyrinthSVG(outputprefix);
 

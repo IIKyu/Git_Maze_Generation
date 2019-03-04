@@ -73,17 +73,12 @@ std::tuple<double, double, double, double> RectangularLabyrinth::GetCoordinateBo
 	return std::make_tuple(0, 0, width_, height_);
 }
 
-void RectangularLabyrinth::GenerateLabyrinth(DepthFirstSearch* algorithm) {
+void RectangularLabyrinth::GenerateLabyrinth(MinimumSpanningtreeAlgorithm* algorithm) {
 	auto minimumspanningtree = algorithm->MinimumSpanningTree(vertices_,
 			adjacencylist_);
 	RemoveBorders(minimumspanningtree);
 }
 
-void RectangularLabyrinth::GenerateLabyrinth(BreadthFirstSearch* algorithm) {
-	auto minimumspanningtree = algorithm->MinimumSpanningTree(vertices_,
-			adjacencylist_);
-	RemoveBorders(minimumspanningtree);
-}
 
 void RectangularLabyrinth::RemoveBorders(const std::vector<std::pair<int, int>>& edges) {
 	for (const auto& edge : edges) {

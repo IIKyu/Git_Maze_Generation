@@ -13,8 +13,7 @@ public:
 	/** Proper to rectangular maze **/
 	RectangularLabyrinth(int, int);
 	/** ************************** **/
-	void GenerateLabyrinth(DepthFirstSearch*);
-	void GenerateLabyrinth(BreadthFirstSearch*);
+	void GenerateLabyrinth(MinimumSpanningtreeAlgorithm*);
 	void PrintLabyrinthSVG(const std::string&);
 	void RemoveBorders(const std::vector<std::pair<int, int>>&);
 	void InitialiseGraph();

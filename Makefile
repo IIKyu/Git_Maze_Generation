@@ -5,7 +5,7 @@ all: mazegen
 
 OBJECTS = cellborder.o \
 	depthfirstsearch.o breadthfirstsearch.o\
-	main.o rectangularlabyrinth.o
+	main.o rectangularlabyrinth.o minimumspanningtreealgorithm.o
 
 mazegen: $(OBJECTS)
 	@echo "Building" $@

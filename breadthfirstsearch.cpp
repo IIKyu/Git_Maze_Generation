@@ -2,9 +2,6 @@
 #include <iostream>
 #include "breadthfirstsearch.h"
 
-BreadthFirstSearch::BreadthFirstSearch() {
-	generator = std::mt19937(randomdevice());
-}
 
 std::vector<std::pair<int, int>> BreadthFirstSearch::MinimumSpanningTree(
     int vertices, const Graph& adjacencylist) {
