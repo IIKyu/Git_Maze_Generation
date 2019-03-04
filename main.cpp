@@ -11,7 +11,7 @@ int main(int argc, char *argv[]) {
 
 	std::string outputprefix = "maze";
 	std::map<std::string, int> optionmap { { "-m", 0 }, { "-s", 20 },
-			{ "-w", 20 }, { "-h", 20 } };
+			{ "-w", 20 }, { "-h", 20 }, {"-t", 0}};
 
 	/* parsing command line parameters */
 
@@ -81,7 +81,17 @@ int main(int argc, char *argv[]) {
 	std::cout << "Generating labyrinth..." << std::endl;
 	labyrinth->GenerateLabyrinth(depthFirstSearch);
 
-	labyrinth->PrintLabyrinthSVG(outputprefix);
-
+	if (optionmap["-t"] == 0) {
+		std::cout << "Rendering maze to '" << outputprefix << ".svg'..."
+				<< std::endl;
+		labyrinth->PrintLabyrinthSVG(outputprefix);
+	} else {
+		std::cout << "Exporting maze plotting parameters to '" << outputprefix
+				<< ".plt' ..." << std::endl;
+		labyrinth->PrintLabyrinthPNG(outputprefix);
+		std::cout << "Rendering maze to '" << outputprefix
+				<< ".png' using gnuplot..." << std::endl;
+		system(("gnuplot '" + outputprefix + ".plt'").c_str());
+	}
 	return 0;
 }

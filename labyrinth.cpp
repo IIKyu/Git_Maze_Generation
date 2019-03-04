@@ -65,3 +65,42 @@ void Labyrinth::PrintLabyrinthSVG(const std::string& outputprefix) const {
   svgfile << "</g>" << std::endl;
   svgfile << "</svg>" << std::endl;
 }
+
+void Labyrinth::PrintLabyrinthPNG(const std::string& outputprefix) const {
+  std::ofstream gnuplotfile(outputprefix + ".plt");
+  if (!gnuplotfile) {
+    std::cerr << "Error opening " << outputprefix << ".plt for writing.\n";
+    std::cerr << "Terminating.";
+    exit(1);
+  }
+
+  gnuplotfile << "unset border\n";
+  gnuplotfile << "unset tics\n";
+  gnuplotfile << "set samples 15\n";
+  gnuplotfile << "set lmargin at screen 0\n";
+  gnuplotfile << "set rmargin at screen 1\n";
+  gnuplotfile << "set bmargin at screen 0\n";
+  gnuplotfile << "set tmargin at screen 1\n";
+
+  double xmin, ymin, xmax, ymax;
+  std::tie(xmin, ymin, xmax, ymax) = GetCoordinateBounds();
+  gnuplotfile << "set xrange[" << xmin - 1 << ":" << xmax + 1 << "]\n";
+  gnuplotfile << "set yrange[" << ymin - 1 << ":" << ymax + 1 << "]\n";
+
+  int xresolution = (xmax - xmin + 2) * 30,
+      yresolution = (ymax - ymin + 2) * 30;
+  gnuplotfile << "set term pngcairo mono enhanced size " << xresolution << ","
+              << yresolution << "\n";
+
+  gnuplotfile << "set output '" << outputprefix << ".png'\n";
+  gnuplotfile << "set multiplot\n";
+  for (int i = 0; i < vertices_; ++i) {
+    for (const auto& edge : adjacencylist_[i]) {
+      if (edge.first < i)
+        gnuplotfile << edge.second->GnuplotPrintString() << "\n";
+    }
+  }
+  gnuplotfile << "plot 1/0 notitle\n";
+  gnuplotfile << "unset multiplot\n";
+  gnuplotfile << "set output\n";
+}
