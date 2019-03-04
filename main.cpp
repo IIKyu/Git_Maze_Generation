@@ -37,6 +37,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	DepthFirstSearch *depthFirstSearch;
+	Labyrinth *labyrinth;
 
 	switch (optionmap["-m"]) {
 	case 0: {
@@ -48,19 +49,7 @@ int main(int argc, char *argv[]) {
 
 		std::cout << "Rectangular labyrinth of size " << optionmap["-w"] << "x"
 				<< optionmap["-h"] << "\n";
-		RectangularLabyrinth *rectangularLabyrinth = new RectangularLabyrinth(
-				optionmap["-w"], optionmap["-h"]);
-
-		std::cout << "Labyrinth generation using Depth-first search\n";
-		depthFirstSearch = new DepthFirstSearch();
-
-		std::cout << "Initialising graph..." << std::endl;
-		rectangularLabyrinth->InitialiseGraph();
-
-		std::cout << "Generating labyrinth..." << std::endl;
-		rectangularLabyrinth->GenerateLabyrinth(depthFirstSearch);
-
-		rectangularLabyrinth->PrintLabyrinthSVG(outputprefix);
+		labyrinth = new RectangularLabyrinth(optionmap["-w"], optionmap["-h"]);
 
 		break;
 	}
@@ -72,18 +61,7 @@ int main(int argc, char *argv[]) {
 			return 1;
 		}
 		std::cout << "Circular labyrinth of size " << optionmap["-s"] << "\n";
-		CircularLabyrinth *circularLabyrinth = new CircularLabyrinth(optionmap["-s"]);
-
-		std::cout << "Labyrinth generation using Depth-first search\n";
-		depthFirstSearch = new DepthFirstSearch();
-
-		std::cout << "Initialising graph..." << std::endl;
-		circularLabyrinth->InitialiseGraph();
-
-		std::cout << "Generating labyrinth..." << std::endl;
-		circularLabyrinth->GenerateLabyrinth(depthFirstSearch);
-
-		circularLabyrinth->PrintLabyrinthSVG(outputprefix);
+		labyrinth = new CircularLabyrinth(optionmap["-s"]);
 
 		break;
 	}
@@ -93,6 +71,17 @@ int main(int argc, char *argv[]) {
 
 		return 1;
 	}
+
+	std::cout << "Labyrinth generation using Depth-first search\n";
+	depthFirstSearch = new DepthFirstSearch();
+
+	std::cout << "Initialising graph..." << std::endl;
+	labyrinth->InitialiseGraph();
+
+	std::cout << "Generating labyrinth..." << std::endl;
+	labyrinth->GenerateLabyrinth(depthFirstSearch);
+
+	labyrinth->PrintLabyrinthSVG(outputprefix);
 
 	return 0;
 }

@@ -1,29 +1,20 @@
 #ifndef RECTANGULARLABYRINTH_H
 #define RECTANGULARLABYRINTH_H
 
-#include <memory>
-#include <vector>
-#include "cellborder.h"
-#include "depthfirstsearch.h"
+#include "labyrinth.h"
 
-class RectangularLabyrinth {
+class RectangularLabyrinth: public Labyrinth {
 public:
 
 	/** Proper to rectangular maze **/
 	RectangularLabyrinth(int, int);
 	/** ************************** **/
-	void GenerateLabyrinth(DepthFirstSearch*);
-	void PrintLabyrinthSVG(const std::string&);
-	void RemoveBorders(const std::vector<std::pair<int, int>>&);
-	void InitialiseGraph();
+
+	virtual void InitialiseGraph();
 
 private:
-	// Solving a maze is equivalent to finding a path in a graph
-	int vertices_;
-	std::vector<std::vector<std::pair<int, std::shared_ptr<CellBorder>>> >adjacencylist_;
-	int startvertex_, endvertex_;
 
-	std::tuple<double, double, double, double> GetCoordinateBounds();
+	virtual std::tuple<double, double, double, double> GetCoordinateBounds() const;
 
 	/** Proper to rectangular maze **/
 	int width_, height_;

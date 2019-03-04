@@ -1,12 +1,8 @@
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-
 #include "rectangularlabyrinth.h"
 
 RectangularLabyrinth::RectangularLabyrinth(int width, int height) :
-		vertices_(width * height), startvertex_(0), endvertex_(
-				width * height - 1), width_(width), height_(height) {
+		Labyrinth(width * height, 0, width * height - 1), width_(width), height_(
+				height) {
 }
 
 /** Proper to rectangular maze **/
@@ -16,8 +12,8 @@ int RectangularLabyrinth::VertexIndex(int row, int column) {
 /** ************************** **/
 
 void RectangularLabyrinth::InitialiseGraph() {
-	adjacencylist_.clear();
-	adjacencylist_.resize(vertices_);
+
+	Labyrinth::InitialiseGraph();
 
 	/** Proper to rectangular maze **/
 
@@ -53,7 +49,6 @@ void RectangularLabyrinth::InitialiseGraph() {
 		}
 	}
 
-
 	// Vertically adjacent cells
 	for (int i = 0; i < height_ - 1; ++i) {
 		for (int j = 0; j < width_; ++j) {
@@ -69,61 +64,6 @@ void RectangularLabyrinth::InitialiseGraph() {
 	/** ************************** **/
 }
 
-std::tuple<double, double, double, double> RectangularLabyrinth::GetCoordinateBounds() {
+std::tuple<double, double, double, double> RectangularLabyrinth::GetCoordinateBounds() const {
 	return std::make_tuple(0, 0, width_, height_);
-}
-
-void RectangularLabyrinth::GenerateLabyrinth(DepthFirstSearch* algorithm) {
-	auto minimumspanningtree = algorithm->MinimumSpanningTree(vertices_,
-			adjacencylist_);
-	RemoveBorders(minimumspanningtree);
-}
-
-void RectangularLabyrinth::RemoveBorders(const std::vector<std::pair<int, int>>& edges) {
-	for (const auto& edge : edges) {
-		int u = edge.first, v = edge.second;
-		for (int i = 0; i < (int) adjacencylist_[u].size(); ++i) {
-			if (adjacencylist_[u][i].first == v) {
-				adjacencylist_[u].erase(adjacencylist_[u].begin() + i);
-				break;
-			}
-		}
-		for (int i = 0; i < (int) adjacencylist_[v].size(); ++i) {
-			if (adjacencylist_[v][i].first == u) {
-				adjacencylist_[v].erase(adjacencylist_[v].begin() + i);
-				break;
-			}
-		}
-	}
-}
-
-void RectangularLabyrinth::PrintLabyrinthSVG(const std::string& outputprefix) {
-	std::ofstream svgfile(outputprefix + ".svg");
-	if (!svgfile) {
-		std::cerr << "Error opening " << outputprefix << ".svg for writing.\n";
-		std::cerr << "Terminating.";
-		exit(1);
-	}
-	double xmin, ymin, xmax, ymax;
-	std::tie(xmin, ymin, xmax, ymax) = GetCoordinateBounds();
-	int xresolution = (xmax - xmin + 2) * 30, yresolution = (ymax - ymin + 2)
-			* 30;
-
-	svgfile << "<svg width=\"" << xresolution << "\" height=\"" << yresolution
-			<< "\" xmlns=\"http://www.w3.org/2000/svg\">" << std::endl;
-	svgfile << "<g transform=\"translate(" << (1 - xmin) * 30 << ","
-			<< yresolution - (1 - ymin) * 30 << ") scale(1,-1)\">" << std::endl;
-	svgfile << "<rect x=\"" << (xmin - 1) * 30 << "\" y=\"" << (ymin - 1) * 30
-			<< "\" width=\"" << xresolution << "\" height=\"" << yresolution
-			<< "\" fill=\"white\"/>" << std::endl;
-
-	for (int i = 0; i < vertices_; ++i) {
-		for (const auto& edge : adjacencylist_[i]) {
-			if (edge.first < i) {
-				svgfile << edge.second->SVGPrintString() << "\n";
-			}
-		}
-	}
-	svgfile << "</g>" << std::endl;
-	svgfile << "</svg>" << std::endl;
 }
