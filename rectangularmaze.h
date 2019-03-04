@@ -1,13 +1,13 @@
-#ifndef RECTANGULARLABYRINTH_H
-#define RECTANGULARLABYRINTH_H
+#ifndef RECTANGULARMaze_H
+#define RECTANGULARMaze_H
 
-#include "labyrinth.h"
+#include "maze.h"
 
-class RectangularLabyrinth: public Labyrinth {
+class RectangularMaze: public Maze {
 public:
 
 	/** Proper to rectangular maze **/
-	RectangularLabyrinth(int, int);
+	RectangularMaze(int, int);
 	/** ************************** **/
 
 	virtual void InitialiseGraph();
@@ -22,4 +22,4 @@ private:
 	/** ************************** **/
 };
 
-#endif /* end of include guard: RECTANGULARLABYRINTH_H */
+#endif /* end of include guard: RECTANGULARMaze_H */

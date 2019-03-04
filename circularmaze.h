@@ -1,13 +1,13 @@
-#ifndef CIRCULARLABYRINTH_H
-#define CIRCULARLABYRINTH_H
+#ifndef CIRCULARMAZE_H
+#define CIRCULARMAZE_H
 
-#include "labyrinth.h"
+#include "maze.h"
 
-class CircularLabyrinth: public Labyrinth {
+class CircularMaze: public Maze {
 public:
 
 	/** Proper to circular maze **/
-	CircularLabyrinth(int);
+	CircularMaze(int);
 	/** *********************** **/
 	void InitialiseGraph();
 
@@ -21,4 +21,4 @@ private:
 
 };
 
-#endif /* end of include guard: CIRCULARLABYRINTH_H */
+#endif /* end of include guard: CIRCULARMAZE_H */

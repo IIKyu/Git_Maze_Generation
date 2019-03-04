@@ -1,6 +1,6 @@
-#include "circularlabyrinth.h"
+#include "circularmaze.h"
 
-CircularLabyrinth::CircularLabyrinth(int size) :
+CircularMaze::CircularMaze(int size) :
 		size_(size) {
 	ringnodecount_ = std::vector<int>(size_);
 	ringnodeprefixsum_ = std::vector<int>(size_);
@@ -19,9 +19,9 @@ CircularLabyrinth::CircularLabyrinth(int size) :
 	endvertex_ = startvertex_ + ringnodecount_.back() / 2;
 }
 
-void CircularLabyrinth::InitialiseGraph() {
+void CircularMaze::InitialiseGraph() {
 
-	Labyrinth::InitialiseGraph();
+	Maze::InitialiseGraph();
 
 	/** Proper to circular maze **/
 
@@ -60,6 +60,6 @@ void CircularLabyrinth::InitialiseGraph() {
 	/** ********************** **/
 }
 
-std::tuple<double, double, double, double> CircularLabyrinth::GetCoordinateBounds() const {
+std::tuple<double, double, double, double> CircularMaze::GetCoordinateBounds() const {
 	return std::make_tuple(-size_, -size_, size_, size_);
 }

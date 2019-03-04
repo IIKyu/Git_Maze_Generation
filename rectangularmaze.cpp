@@ -1,19 +1,19 @@
-#include "rectangularlabyrinth.h"
+#include "rectangularmaze.h"
 
-RectangularLabyrinth::RectangularLabyrinth(int width, int height) :
-		Labyrinth(width * height, 0, width * height - 1), width_(width), height_(
+RectangularMaze::RectangularMaze(int width, int height) :
+		Maze(width * height, 0, width * height - 1), width_(width), height_(
 				height) {
 }
 
 /** Proper to rectangular maze **/
-int RectangularLabyrinth::VertexIndex(int row, int column) {
+int RectangularMaze::VertexIndex(int row, int column) {
 	return row * width_ + column;
 }
 /** ************************** **/
 
-void RectangularLabyrinth::InitialiseGraph() {
+void RectangularMaze::InitialiseGraph() {
 
-	Labyrinth::InitialiseGraph();
+	Maze::InitialiseGraph();
 
 	/** Proper to rectangular maze **/
 
@@ -64,6 +64,6 @@ void RectangularLabyrinth::InitialiseGraph() {
 	/** ************************** **/
 }
 
-std::tuple<double, double, double, double> RectangularLabyrinth::GetCoordinateBounds() const {
+std::tuple<double, double, double, double> RectangularMaze::GetCoordinateBounds() const {
 	return std::make_tuple(0, 0, width_, height_);
 }

@@ -5,7 +5,7 @@ all: mazegen
 
 OBJECTS = cellborder.o \
 	depthfirstsearch.o \
-	main.o rectangularlabyrinth.o circularlabyrinth.o labyrinth.o \
+	main.o rectangularmaze.o circularmaze.o maze.o \
 	breadthfirstsearch.o minimumspanningtreealgorithm.o
 
 mazegen: $(OBJECTS)

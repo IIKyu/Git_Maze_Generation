@@ -5,8 +5,8 @@
 
 #include "depthfirstsearch.h"
 #include "breadthfirstsearch.h"
-#include "rectangularlabyrinth.h"
-#include "circularlabyrinth.h"
+#include "rectangularmaze.h"
+#include "circularmaze.h"
 
 int main(int argc, char *argv[]) {
 
@@ -37,20 +37,20 @@ int main(int argc, char *argv[]) {
 		optionmap[argv[i++]] = x;
 	}
 
-	Labyrinth *labyrinth;
+	Maze *maze;
 	MinimumSpanningtreeAlgorithm *algorithm;
 
 	switch (optionmap["-m"]) {
 	case 0: {
 		if (optionmap["-w"] < 1 or optionmap["-h"] < 1) {
 			std::cerr << "Invalide size " << optionmap["-w"] << "x"
-					<< optionmap["-h"] << " for rectangular labyrinth\n";
+					<< optionmap["-h"] << " for rectangular Maze\n";
 			return 1;
 		}
 
-		std::cout << "Rectangular labyrinth of size " << optionmap["-w"] << "x"
+		std::cout << "Rectangular Maze of size " << optionmap["-w"] << "x"
 				<< optionmap["-h"] << "\n";
-		labyrinth = new RectangularLabyrinth(optionmap["-w"], optionmap["-h"]);
+		maze = new RectangularMaze(optionmap["-w"], optionmap["-h"]);
 
 		break;
 	}
@@ -58,17 +58,17 @@ int main(int argc, char *argv[]) {
 	case 1: {
 		if (optionmap["-s"] < 1) {
 			std::cerr << "Invalide size " << optionmap["-s"]
-					<< " for circular labyrinth\n";
+					<< " for circular Maze\n";
 			return 1;
 		}
-		std::cout << "Circular labyrinth of size " << optionmap["-s"] << "\n";
-		labyrinth = new CircularLabyrinth(optionmap["-s"]);
+		std::cout << "Circular Maze of size " << optionmap["-s"] << "\n";
+		maze = new CircularMaze(optionmap["-s"]);
 
 		break;
 	}
 
 	default:
-		std::cerr << "Unknown labyrinth type " << optionmap["-m"];
+		std::cerr << "Unknown Maze type " << optionmap["-m"];
 
 		return 1;
 	}
@@ -76,14 +76,14 @@ int main(int argc, char *argv[]) {
 	switch (optionmap["-a"]) {
 
 	case 0: {
-		std::cout << "Labyrinth generation using Depth-first search\n";
+		std::cout << "Maze generation using Depth-first search\n";
 		algorithm = new DepthFirstSearch();
 
 		break;
 	}
 
 	case 1: {
-		std::cout << "Labyrinth generation using Breadth-first search\n";
+		std::cout << "Maze generation using Breadth-first search\n";
 		algorithm = new BreadthFirstSearch();
 
 		break;
@@ -95,19 +95,19 @@ int main(int argc, char *argv[]) {
 	}
 
 	std::cout << "Initialising graph..." << std::endl;
-	labyrinth->InitialiseGraph();
+	maze->InitialiseGraph();
 
-	std::cout << "Generating labyrinth..." << std::endl;
-	labyrinth->GenerateLabyrinth(algorithm);
+	std::cout << "Generating Maze..." << std::endl;
+	maze->GenerateMaze(algorithm);
 
 	if (optionmap["-t"] == 0) {
 		std::cout << "Rendering maze to '" << outputprefix << ".svg'..."
 				<< std::endl;
-		labyrinth->PrintLabyrinthSVG(outputprefix);
+		maze->PrintMazeSVG(outputprefix);
 	} else {
 		std::cout << "Exporting maze plotting parameters to '" << outputprefix
 				<< ".plt' ..." << std::endl;
-		labyrinth->PrintLabyrinthPNG(outputprefix);
+		maze->PrintMazePNG(outputprefix);
 		std::cout << "Rendering maze to '" << outputprefix
 				<< ".png' using gnuplot..." << std::endl;
 		system(("gnuplot '" + outputprefix + ".plt'").c_str());
