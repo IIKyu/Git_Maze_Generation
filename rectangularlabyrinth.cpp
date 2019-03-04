@@ -127,5 +127,3 @@ void RectangularLabyrinth::PrintLabyrinthSVG(const std::string& outputprefix) {
 	svgfile << "</g>" << std::endl;
 	svgfile << "</svg>" << std::endl;
 }
-
-int RectangularLabyrinth::width_ = 0;
