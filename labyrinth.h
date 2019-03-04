@@ -4,14 +4,12 @@
 #include <memory>
 #include <vector>
 #include "cellborder.h"
-#include "depthfirstsearch.h"
-#include "breadthfirstsearch.h"
+#include "minimumspanningtreealgorithm.h"
 
 class Labyrinth {
 public:
 	Labyrinth(int = 0, int = 0, int = 1);
-	void GenerateLabyrinth(DepthFirstSearch*);
-	void GenerateLabyrinth(BreadthFirstSearch*);
+	void GenerateLabyrinth(MinimumSpanningtreeAlgorithm*);
 	void PrintLabyrinthSVG(const std::string&) const;
 	void PrintLabyrinthPNG(const std::string&) const;
 	void RemoveBorders(const std::vector<std::pair<int, int>>&);

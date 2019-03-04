@@ -11,13 +11,7 @@ void Labyrinth::InitialiseGraph() {
   adjacencylist_.resize(vertices_);
 }
 
-void Labyrinth::GenerateLabyrinth(DepthFirstSearch* algorithm) {
-  auto minimumspanningtree =
-      algorithm->MinimumSpanningTree(vertices_, adjacencylist_);
-  RemoveBorders(minimumspanningtree);
-}
-
-void Labyrinth::GenerateLabyrinth(BreadthFirstSearch* algorithm) {
+void Labyrinth::GenerateLabyrinth(MinimumSpanningtreeAlgorithm* algorithm) {
   auto minimumspanningtree =
       algorithm->MinimumSpanningTree(vertices_, adjacencylist_);
   RemoveBorders(minimumspanningtree);

@@ -1,10 +1,6 @@
 #include "depthfirstsearch.h"
 #include <algorithm>
 
-DepthFirstSearch::DepthFirstSearch() {
-	generator = std::mt19937(randomdevice());
-}
-
 /** Proper to depthfirstsearch **/
 
 std::vector<std::pair<int, int>> DepthFirstSearch::MinimumSpanningTree(

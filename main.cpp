@@ -38,6 +38,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	Labyrinth *labyrinth;
+	MinimumSpanningtreeAlgorithm *algorithm;
 
 	switch (optionmap["-m"]) {
 	case 0: {
@@ -76,26 +77,14 @@ int main(int argc, char *argv[]) {
 
 	case 0: {
 		std::cout << "Labyrinth generation using Depth-first search\n";
-		DepthFirstSearch *depthFirstSearch = new DepthFirstSearch();
-
-		std::cout << "Initialising graph..." << std::endl;
-		labyrinth->InitialiseGraph();
-
-		std::cout << "Generating labyrinth..." << std::endl;
-		labyrinth->GenerateLabyrinth(depthFirstSearch);
+		algorithm = new DepthFirstSearch();
 
 		break;
 	}
 
 	case 1: {
 		std::cout << "Labyrinth generation using Breadth-first search\n";
-		BreadthFirstSearch *breadthFirstSearch = new BreadthFirstSearch();
-
-		std::cout << "Initialising graph..." << std::endl;
-		labyrinth->InitialiseGraph();
-
-		std::cout << "Generating labyrinth..." << std::endl;
-		labyrinth->GenerateLabyrinth(breadthFirstSearch);
+		algorithm = new BreadthFirstSearch();
 
 		break;
 	}
@@ -104,6 +93,12 @@ int main(int argc, char *argv[]) {
 		std::cerr << "Unknown algorithm type " << optionmap["-a"];
 		return 1;
 	}
+
+	std::cout << "Initialising graph..." << std::endl;
+	labyrinth->InitialiseGraph();
+
+	std::cout << "Generating labyrinth..." << std::endl;
+	labyrinth->GenerateLabyrinth(algorithm);
 
 	if (optionmap["-t"] == 0) {
 		std::cout << "Rendering maze to '" << outputprefix << ".svg'..."
