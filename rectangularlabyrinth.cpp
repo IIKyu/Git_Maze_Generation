@@ -79,6 +79,12 @@ void RectangularLabyrinth::GenerateLabyrinth(DepthFirstSearch* algorithm) {
 	RemoveBorders(minimumspanningtree);
 }
 
+void RectangularLabyrinth::GenerateLabyrinth(BreadthFirstSearch* algorithm) {
+	auto minimumspanningtree = algorithm->MinimumSpanningTree(vertices_,
+			adjacencylist_);
+	RemoveBorders(minimumspanningtree);
+}
+
 void RectangularLabyrinth::RemoveBorders(const std::vector<std::pair<int, int>>& edges) {
 	for (const auto& edge : edges) {
 		int u = edge.first, v = edge.second;
@@ -127,5 +133,3 @@ void RectangularLabyrinth::PrintLabyrinthSVG(const std::string& outputprefix) {
 	svgfile << "</g>" << std::endl;
 	svgfile << "</svg>" << std::endl;
 }
-
-int RectangularLabyrinth::width_ = 0;

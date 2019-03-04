@@ -1,4 +1,0 @@
-digraph G { 
-	rankdir=BT;
-1 [shape=record,style=filled,fillcolor=yellow,label="{Block 0\nBlock 2\nBlock 1\n|cellborder.cpp\n}"];
-}

@@ -4,7 +4,7 @@ CXXFLAGS = -W -Wall -Wno-unused-result -O3 -std=c++11
 all: mazegen
 
 OBJECTS = cellborder.o \
-	depthfirstsearch.o \
+	depthfirstsearch.o breadthfirstsearch.o\
 	main.o rectangularlabyrinth.o
 
 mazegen: $(OBJECTS)

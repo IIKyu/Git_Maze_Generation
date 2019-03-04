@@ -5,6 +5,7 @@
 #include <vector>
 #include "cellborder.h"
 #include "depthfirstsearch.h"
+#include "breadthfirstsearch.h"
 
 class RectangularLabyrinth {
 public:
@@ -13,6 +14,7 @@ public:
 	RectangularLabyrinth(int, int);
 	/** ************************** **/
 	void GenerateLabyrinth(DepthFirstSearch*);
+	void GenerateLabyrinth(BreadthFirstSearch*);
 	void PrintLabyrinthSVG(const std::string&);
 	void RemoveBorders(const std::vector<std::pair<int, int>>&);
 	void InitialiseGraph();

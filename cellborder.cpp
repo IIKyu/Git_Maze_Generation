@@ -2,15 +2,6 @@
 #include <cmath>
 #include <tuple>
 
-double test = 10;
-static int test = 0;
-
-namespace n1 {
-	namespace n2 {
-		typedef std::string string;
-	}
-}
-
 LineBorder::LineBorder(double x1, double y1, double x2, double y2) :
 		x1_(x1), y1_(y1), x2_(x2), y2_(y2) {
 }
@@ -19,7 +10,7 @@ LineBorder::LineBorder(std::tuple<double, double, double, double> xy) {
 	std::tie(x1_, y1_, x2_, y2_) = xy;
 }
 
-n1::n2::string LineBorder::GnuplotPrintString() const {
+std::string LineBorder::GnuplotPrintString() const {
 	return "set arrow from " + std::to_string(x1_) + "," + std::to_string(y1_)
 			+ " to " + std::to_string(x2_) + "," + std::to_string(y2_)
 			+ " nohead lt -1 lw 2";
@@ -30,9 +21,6 @@ std::string LineBorder::SVGPrintString() const {
 			+ std::to_string(x2_ * 30) + "\" y1=\"" + std::to_string(y1_ * 30)
 			+ "\" y2=\"" + std::to_string(y2_ * 30)
 			+ "\" stroke=\"black\" stroke-linecap=\"round\" stroke-width=\"3\"/>";
-}
-
-void LineBorder::titi() const {
 }
 
 ArcBorder::ArcBorder(double cx, double cy, double r, double theta1,

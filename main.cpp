@@ -4,12 +4,13 @@
 #include <string>
 
 #include "depthfirstsearch.h"
+#include "breadthfirstsearch.h"
 #include "rectangularlabyrinth.h"
 
 int main(int argc, char *argv[]) {
 
 	std::string outputprefix = "maze";
-	std::map<std::string, int> optionmap { { "-w", 20 }, { "-h", 20 } };
+	std::map<std::string, int> optionmap { { "-w", 20 }, { "-h", 20 }, { "-a", 0 } };
 
 	/* parsing command line parameters */
 
@@ -36,7 +37,6 @@ int main(int argc, char *argv[]) {
 
 
 	RectangularLabyrinth *rectangularLabyrinth;
-	DepthFirstSearch *depthFirstSearch;
 
 	if (optionmap["-w"] < 1 or optionmap["-h"] < 1) {
 		std::cerr << "Invalide size " << optionmap["-w"] << "x"
@@ -48,16 +48,39 @@ int main(int argc, char *argv[]) {
 			<< optionmap["-h"] << "\n";
 	rectangularLabyrinth = new RectangularLabyrinth(optionmap["-w"], optionmap["-h"]);
 
-	std::cout << "Labyrinth generation using Depth-first search\n";
-	depthFirstSearch = new DepthFirstSearch();
 
+	switch (optionmap["-a"]) {
 
-	std::cout << "Initialising graph..." << std::endl;
-	rectangularLabyrinth->InitialiseGraph();
+	case 0: {
+		std::cout << "Labyrinth generation using Depth-first search\n";
+		DepthFirstSearch *depthFirstSearch = new DepthFirstSearch();
 
-	std::cout << "Generating labyrinth..." << std::endl;
-	rectangularLabyrinth->GenerateLabyrinth(depthFirstSearch);
+		std::cout << "Initialising graph..." << std::endl;
+		rectangularLabyrinth->InitialiseGraph();
 
+		std::cout << "Generating labyrinth..." << std::endl;
+		rectangularLabyrinth->GenerateLabyrinth(depthFirstSearch);
+
+		break;
+	}
+
+	case 1: {
+		std::cout << "Labyrinth generation using Breadth-first search\n";
+		BreadthFirstSearch *breadthFirstSearch = new BreadthFirstSearch();
+
+		std::cout << "Initialising graph..." << std::endl;
+		rectangularLabyrinth->InitialiseGraph();
+
+		std::cout << "Generating labyrinth..." << std::endl;
+		rectangularLabyrinth->GenerateLabyrinth(breadthFirstSearch);
+
+		break;
+	}
+
+	default:
+		std::cerr << "Unknown algorithm type " << optionmap["-a"];
+		return 1;
+	}
 
 	rectangularLabyrinth->PrintLabyrinthSVG(outputprefix);
 
